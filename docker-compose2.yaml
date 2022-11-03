@@ -1,0 +1,62 @@
+version: '3.0'
+
+services:
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/config:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=tn8o4Ak9
+
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8085:80"
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: tn8o4Ak9
+
+  redis:
+    image: redis:alpine3.11
+
+  user-api:
+    build: ./bookkeeping-user-api/
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      SERVER_PORT: 9092
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: bookkeeping
+      DB_USER: root
+      DB_PASSWORD: tn8o4Ak9
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      UPLOAD_ACCESS_KEY: XXXXXXXXXXXXXXXXXX
+      UPLOAD_SECRET_KEY: XXXXXXXXXXXXXXXXXX
+      UPLOAD_FLOW_IMAGE_BUCKET: XXXXXXXXXXXXXXXXXX
+      UPLOAD_FLOW_IMAGE_HOST: XXXXXXXXXXXXXXXXXX
+      UPLOAD_FLOW_IMAGE_CALL_BACK_URL: XXXXXXXXXXXXXXXXXX/api/v1/flow-images/upload-callback
+    ports:
+      - "9092:9092"
+
+  user-fe:
+    build: ./bookkeeping-user-fe/
+    depends_on:
+      - user-api
+    environment:
+      API_HOST: http://user-api:9092
+#    volumes:
+#      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "5000:80"
+
+volumes:
+  mysql_data:

@@ -1,0 +1,27 @@
+.row {
+  align-items: baseline;
+  .amount-col {
+    :global {
+      .ant-form-item-label {
+        flex: 1 !important;
+        width: auto !important;
+        max-width: none !important;
+      }
+      .ant-form-item-control {
+        flex: 2;
+      }
+    }
+  }
+  .convert-amount-col {
+    :global {
+      .ant-form-item-label {
+        flex: 2 !important;
+        width: auto !important;
+        max-width: none !important;
+      }
+      .ant-form-item-control {
+        flex: 2;
+      }
+    }
+  }
+}

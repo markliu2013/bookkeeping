@@ -1,0 +1,34 @@
+name: bookkeeping_user_flutter
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+environment:
+  sdk: ">=2.14.4 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.17.0 #日期格式化
+  dio: ^4.0.6
+  formz: ^0.4.1
+  shared_preferences: ^2.0.15
+  equatable: ^2.0.3
+  flutter_bloc: ^8.0.1
+  json_annotation: ^4.6.0
+  awesome_select: ^5.2.0
+  pull_to_refresh: ^2.0.0
+  fluttertoast: ^8.0.9
+  syncfusion_flutter_charts: ^20.2.40
+  syncfusion_flutter_datepicker: ^20.2.40
+  image_picker: ^0.8.5+3
+  flutter_localizations:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.1.10
+  json_serializable: ^6.1.6
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+  generate: false

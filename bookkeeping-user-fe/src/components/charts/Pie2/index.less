@@ -1,0 +1,41 @@
+@import '~antd/es/style/themes/default.less';
+
+.pie {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  .chart {
+    flex: 1;
+  }
+  .legend {
+    margin: 0;
+    padding: 0;
+    width: 240px;
+    min-width: 220px;
+    list-style: none;
+    li {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      cursor: pointer;
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .legendTitle {
+        flex: 1;
+        padding-left: 8px;
+        color: @text-color;
+      }
+      .percent {
+        width: 55px;
+        color: @text-color-secondary;
+      }
+      .value {
+        width: 65px;
+      }
+    }
+  }
+}

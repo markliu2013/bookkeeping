@@ -1,0 +1,111 @@
+{
+	"easycom": {
+		"autoscan": true, //是否开启自动扫描，开启后将会自动扫描符合components/组件名称/组件名称.vue目录结构的组件
+		"custom": {			
+			"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
+		}
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+		    "path": "pages/login/login",
+		    "style": {
+		        "navigationBarTitleText": "登录",
+				"titleAlign": "center",
+		        "enablePullDownRefresh": false
+		    }
+		},
+        {
+            "path": "pages/flow-form/flow-form",
+            "style": {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+        },
+		{
+            "path": "pages/select/select",
+            "style": {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/flow-detail/flow-detail",
+            "style": {
+                "navigationBarTitleText": "账单详情",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+        {
+            "path" : "pages/account-detail/account-detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "账户详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/accounts/accounts",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+               "enablePullDownRefresh": true,
+               "navigationStyle": "custom"
+            }
+            
+        }
+        ,{
+            "path" : "pages/flows/flows",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+            }
+        }
+        ,{
+            "path" : "pages/charts/charts",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/my",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
+        ,{
+            "path" : "pages/books/books",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {}
+}

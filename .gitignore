@@ -1,0 +1,55 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+.gradle/
+
+bin/
+
+.DS_Store
+build/
+.apt_generated_tests/
+
+
+# dependencies
+node_modules
+npm-debug.log*
+yarn-error.log
+
+
+# umi
+.umi
+.umi-production
+
+#dist
+dist
+.hbuilderx
+unpackage
+
+.env
