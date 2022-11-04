@@ -7,6 +7,8 @@ import com.qiniu.util.StringMap;
 import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import javax.annotation.Resource;
 import java.util.Optional;
 
@@ -35,6 +37,14 @@ public class FlowImageService {
     private String callBackUrl;
 
     public String uploadToken(Integer userSignInId) {
+        if (!StringUtils.hasText(uploadAK) ||
+            !StringUtils.hasText(uploadSK) ||
+            !StringUtils.hasText(uploadBucket) ||
+            !StringUtils.hasText(imageHost) ||
+            !StringUtils.hasText(callBackUrl)
+        ) {
+            throw new UploadKeyEmptyException();
+        }
         Auth auth = Auth.create(uploadAK, uploadSK);
         StringMap putPolicy = new StringMap();
         String saveKey = userSignInId.toString() + "$(etag)" + ".jpg";

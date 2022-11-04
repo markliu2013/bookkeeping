@@ -26,4 +26,10 @@ public class FlowImageExceptionHandler {
         return new ErrorResponse(702, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
     }
 
+    @ExceptionHandler(value = UploadKeyEmptyException.class)
+    @ResponseBody
+    public BaseResponse handleException(UploadKeyEmptyException e) {
+        return new ErrorResponse(703, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
+    }
+
 }

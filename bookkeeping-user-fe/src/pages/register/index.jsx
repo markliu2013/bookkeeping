@@ -36,7 +36,7 @@ export default () => {
         <Form.Item name="password" rules={ passwordRules() }>
           <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder={t('placeholder.password')} />
         </Form.Item>
-        <Form.Item name="inviteCode" rules={ requiredRules() }>
+        <Form.Item name="inviteCode">
           <Input prefix={<VerifiedOutlined className="site-form-item-icon" />} placeholder={t('placeholder.invite.code')} />
         </Form.Item>
         <Form.Item name="email" rules={ emailRules() }>

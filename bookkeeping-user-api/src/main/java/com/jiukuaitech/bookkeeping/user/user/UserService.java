@@ -8,6 +8,7 @@ import com.jiukuaitech.bookkeeping.user.book.BookVOForList;
 import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.group.GroupRepository;
 import com.jiukuaitech.bookkeeping.user.group.GroupVOForList;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,13 +36,16 @@ public class UserService {
     @Resource
     private RedisTemplate<String, Integer> redisTemplate;
 
+    @Value("${invite.code}")
+    private String inviteCode;
+
     public User getUser(Integer userSignInId) {
-        return userRepository.findById(userSignInId).orElseThrow(()->new SessionUserNotFoundException());
+        return userRepository.findById(userSignInId).orElseThrow(SessionUserNotFoundException::new);
     }
 
     @Transactional
     public boolean register(UserRegisterRequest request, HttpServletRequest httpServletRequest) {
-        if (!"459097".equals(request.getInviteCode())) {
+        if (StringUtils.hasText(inviteCode) && !inviteCode.equals(request.getInviteCode())) {
             throw new InviteCodeErrorException();
         }
         // 检查用户名是否存在

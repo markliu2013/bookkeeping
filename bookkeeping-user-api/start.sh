@@ -1,2 +1,3 @@
 #!/bin/bash
-java -jar bookkeeping-user-0.1.jar
+export $(grep -v '^#' .env | xargs)
+./mvnw spring-boot:run
