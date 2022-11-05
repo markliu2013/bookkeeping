@@ -1,7 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit",
     "start": "umi dev",
     "build": "umi build"
   },
@@ -11,7 +10,6 @@
     "dva-model-extend": "^0.1.2"
   },
   "devDependencies": {
-    "increase-memory-limit": "^1.0.3",
     "cross-env": "^5.0.5",
     "umi": "^3.5.0",
     "@umijs/preset-react": "^1.4.8"

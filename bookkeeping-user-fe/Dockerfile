@@ -9,7 +9,6 @@ COPY src src
 COPY package.json .
 COPY package-lock.json .
 RUN npm install
-RUN npm run fix-memory-limit
 RUN npm run build
 
 FROM nginx:1.21-alpine
