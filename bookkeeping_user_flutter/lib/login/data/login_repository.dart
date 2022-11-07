@@ -33,6 +33,13 @@ class LoginRepository {
     return prefs.setString('User-Token', token);
   }
 
+  Future<bool> saveApiUrl(String url) async {
+    session["apiUrl"] = url;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    HttpClient().init();
+    return prefs.setString('Api-Url', url);
+  }
+
   Future<bool> deleteToken() async {
     session["userToken"] = null;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,6 +51,13 @@ class LoginRepository {
     final String userToken = prefs.getString('User-Token') ?? '';
     session['userToken'] = userToken;
     return userToken;
+  }
+
+  Future<String> getApiUrl() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String apiUrl = prefs.getString('Api-Url') ?? '';
+    session['apiUrl'] = apiUrl;
+    return apiUrl;
   }
 
 }

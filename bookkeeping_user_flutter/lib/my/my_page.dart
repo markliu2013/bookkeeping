@@ -82,6 +82,14 @@ class MyPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
+                  title: const Text('api地址'),
+                  trailing: Text(session['apiUrl']),
+                  onTap: () {
+                    //Navigator.pushNamed(context, );
+                  }
+              ),
+              Divider(),
+              ListTile(
                   title: const Text('当前版本号：'),
                   trailing: const Text('1.0.1')
               ),

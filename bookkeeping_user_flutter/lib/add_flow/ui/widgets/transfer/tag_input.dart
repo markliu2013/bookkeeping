@@ -17,7 +17,7 @@ class TagInput extends StatelessWidget {
           SmartSelect<String>.multiple(
             key: Key(new DateTime.now().millisecondsSinceEpoch.toString()),
             title: '标签',
-            selectedValue: state,
+            selectedValue: state ?? [],
             onChange: (selected) {
               context.read<AddTransferBloc>().add(AddTransferTagChanged(selected!.value ?? []));
             },

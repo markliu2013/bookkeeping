@@ -20,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onAppStarted(_, Emitter<AuthState> emit) async {
+    await loginRepository.getApiUrl();
     final String token = await loginRepository.getToken();
     if (token.isNotEmpty) {
       try {

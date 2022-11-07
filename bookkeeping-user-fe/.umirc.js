@@ -9,7 +9,7 @@ export default defineConfig({
       'changeOrigin': true,
     },
   },
-  publicPath: process.env.NODE_ENV === 'production' ? 'http://static.jiukuaitech.com/' : '/',
+  // publicPath: process.env.NODE_ENV === 'production' ? 'http://static.jiukuaitech.com/' : '/',
   hash: true,
   antd: {
     compact: true
