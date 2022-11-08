@@ -43,6 +43,7 @@ services:
       UPLOAD_FLOW_IMAGE_BUCKET: XXX
       UPLOAD_FLOW_IMAGE_HOST: http://XXX
       UPLOAD_FLOW_IMAGE_CALL_BACK_URL: http://XXX/api/v1/flow-images/upload-callback
+      INVITE_CODE: 1111
 
   user-fe:
     image: markliu2018/bookkeeping-user-fe:latest
