@@ -17,6 +17,7 @@
 		
 		<uni-list :border="false" style="margin-top: 20px;">
 			<uni-list-item title="账本管理" clickable link @click="openBooks" />
+			<uni-list-item title="API地址" :rightText="apiUrl" />
 			<uni-list-item title="当前版本号" rightText="1.0.1" />
 		</uni-list>
 		<view class="u-content">
@@ -46,6 +47,9 @@
 			},
 			defaultBook() {
 				return this.$store.getters['defaultBook'];
+			},
+			apiUrl() {
+				return this.$store.getters['apiUrl'];
 			}
 		},
 		onLoad: function() {

@@ -50,7 +50,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wxb88c98ee5e2f019f",
+        "appid" : "wx8c8c34da3c8b8156",
         "setting" : {
             "urlCheck" : false
         },
@@ -73,7 +73,7 @@
                 //使用代理
                 "/api/v1" : {
                     // "target": "http://47.115.83.135/api/v2",
-                    "target" : "https://jz.jiukuaitech.com",
+                    "target" : "https://testjz.jiukuaitech.com",
                     "changeOrigin" : true,
                     "pathRewrite" : {}
                 }

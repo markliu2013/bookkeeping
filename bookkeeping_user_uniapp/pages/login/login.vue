@@ -8,8 +8,11 @@
 			<u-form-item label="密码" prop="password">
 				<u--input type="password" v-model="form.password"></u--input>
 			</u-form-item>
+			<u-form-item label="API地址" prop="apiUrl">
+				<u--input v-model="form.apiUrl"></u--input>
+			</u-form-item>
 		</u--form>
-		<u-button type="primary" @click="submit" text="提交"></u-button>
+		<u-button type="primary" @click="submit" :loading="loading" text="提交"></u-button>
 	</view>
 </template>
 
@@ -21,7 +24,9 @@
 				form: {
 					userName: '',
 					password: '',
+					apiUrl: 'https://testjz.jiukuaitech.com/api/v1/'
 				},
+				loading: false,
 				rules: {
 					'userName': {
 						type: 'string',
@@ -35,6 +40,12 @@
 						message: '请输入密码',
 						trigger: ['blur', 'change']
 					},
+					'apiUrl': {
+						type: 'string',
+						required: true,
+						message: '请输入API地址',
+						trigger: ['blur', 'change']
+					},
 				}
 			}
 		},
@@ -44,12 +55,21 @@
 		methods: {
 			async submit() {
 				try {
+					this.loading = true;
 					await this.$refs.uForm.validate();
+					const $this = this;
+					uni.$u.http.setConfig((config) => {
+						config.baseURL = $this.form.apiUrl;
+						return config;
+					});
+					this.$store.commit('updateApiUrl', $this.form.apiUrl);
 					const data = await signin(this.form);
 					this.$store.commit('updateToken', data.token);
 					uni.$u.toast('登录成功');
+					this.loading = false;
 					uni.redirectTo({ url: '/pages/flows/flows' });
 				} catch (e) {
+					this.loading = false;
 					console.log(e);
 				}
 			}

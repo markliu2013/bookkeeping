@@ -12,6 +12,10 @@
 			}
 		},
 		onLoad: function() {
+			uni.$u.http.setConfig((config) => {
+				config.baseURL = uni.getStorageSync('apiUrl');
+				return config;
+			});
 			if (uni.getStorageSync('userToken')) {
 				uni.reLaunch({ url: '/pages/flows/flows' });
 			} else {

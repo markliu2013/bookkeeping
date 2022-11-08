@@ -3,9 +3,9 @@ module.exports = (vm) => {
     // 初始化请求配置
     uni.$u.http.setConfig((config) => {
         /* config 为默认全局配置*/
-        // config.baseURL = 'http://testjz.jiukuaitech.com/api/v1'; /* 根域名 */
-		config.baseURL = '/api/v1'; /* 根域名 */
-        return config
+        config.baseURL = 'https://testjz.jiukuaitech.com/api/v1/'; /* 根域名 */
+		// config.baseURL = '/api/v1/'; /* 根域名 */
+        return config;
     })
 	
 	// 请求拦截
@@ -52,7 +52,8 @@ module.exports = (vm) => {
 	}, (response) => { 
 		/*  对响应错误做点什么 （statusCode !== 200）*/
 		// 对响应错误做点什么 （statusCode !== 200
-		uni.$u.toast('网络错误，稍后重试')
+		uni.$u.toast(response.errMsg);
+		// uni.$u.toast('网络错误，稍后重试')
 		return Promise.reject(response)
 	})
 }

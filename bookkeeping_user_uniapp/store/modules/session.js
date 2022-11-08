@@ -8,6 +8,7 @@ export default {
 			user: undefined,
 			defaultBook: undefined,
 			defaultGroup: undefined,
+			apiUrl: undefined,
 		}
 	},
 	
@@ -32,7 +33,16 @@ export default {
 		},
 		defaultCurrencyCode(state) {
 			return state.defaultGroup.defaultCurrencyCode
-		}
+		},
+		apiUrl(state) {
+			if (state.apiUrl) {
+				return state.apiUrl;
+			} else {
+				const apiUrl = uni.getStorageSync('apiUrl');
+				state.apiUrl = apiUrl;
+				return apiUrl;
+			}
+		},
 	},
 	
 	actions: {
@@ -57,7 +67,11 @@ export default {
 		},
 		setDefaultGroup: (state, group) => {
 			state.defaultGroup = group;
-		}
+		},
+		updateApiUrl: (state, apiUrl) => {
+			state.apiUrl = apiUrl;
+			uni.setStorageSync('apiUrl', apiUrl);
+		},
 	}
 	
 }
