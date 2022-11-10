@@ -19,7 +19,7 @@ export default (props) => {
         <div className={styles['logo']}>九快计账</div>
         <PrimaryMenu />
       </Layout.Sider>
-      <Layout className={styles['layout']}>
+      <Layout>
         <Layout.Header className={styles['header']}>
           <Row>
             <Col flex="1 1 0%" style={{textAlign: 'center'}}>
