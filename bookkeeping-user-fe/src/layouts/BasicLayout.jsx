@@ -14,8 +14,8 @@ export default (props) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Layout.Sider trigger={null} collapsible collapsed={collapsed}>
+    <Layout style={{ minHeight: '100vh' }} className={styles['page-layout']}>
+      <Layout.Sider trigger={null} collapsible collapsed={collapsed} className={styles['layout-sider']}>
         <div className={styles['logo']}>九快计账</div>
         <PrimaryMenu />
       </Layout.Sider>

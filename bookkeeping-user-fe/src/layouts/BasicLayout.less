@@ -1,4 +1,9 @@
 .logo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 200px;
   height: 48px;
   background: #1890ff;
   color:#fff;
@@ -9,6 +14,11 @@
   font-weight: bold;
 }
 .header {
+  position: fixed;
+  top: 0;
+  left: 200px;
+  z-index: 999;
+  width: 100%;
   height: 48px;
   line-height: 48px;
   background: #fff;
@@ -27,6 +37,21 @@
       color: #1890ff;
     }
   }
+}
+.page-layout {
+  padding-left: 200px;
+}
+.layout-sider {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  padding-top: 48px;
+  width: 200px;
+  height: 100%;
+}
+.layout {
+  padding-top: 48px;
 }
 .content {
   padding: 12px;
