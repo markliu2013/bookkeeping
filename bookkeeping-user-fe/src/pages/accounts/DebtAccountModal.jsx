@@ -91,6 +91,9 @@ export default () => {
             </Form.Item>
           </Col>
         </Row>
+        <Form.Item label={t('account.card.no')} name="no" labelCol={{ style: { width: 68 } }}>
+          <Input />
+        </Form.Item>
         <Row gutter={8}>
           <Col span={6}>
             <Form.Item label={t('expenseable')} valuePropName="checked" name="expenseable">

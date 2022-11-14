@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.time.Instant;
 import java.util.Optional;
 
 @Service
@@ -75,7 +76,7 @@ public class FlowImageService {
             image.setHost(imageHost);
             image.setUri("/" + request.getKey());
             image.setUser(user);
-            image.setCreateTime(System.currentTimeMillis());
+            image.setCreateTime(Instant.now().toEpochMilli());
             flowImageRepository.save(image);
         }
         return FlowImageVOForList.fromEntity(image);

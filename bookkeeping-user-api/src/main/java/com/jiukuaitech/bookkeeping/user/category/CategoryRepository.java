@@ -2,6 +2,7 @@ package com.jiukuaitech.bookkeeping.user.category;
 
 import com.jiukuaitech.bookkeeping.user.book.Book;
 import com.jiukuaitech.bookkeeping.user.base.HasBookRepository;
+import com.jiukuaitech.bookkeeping.user.group.Group;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
@@ -16,5 +17,7 @@ public interface CategoryRepository extends HasBookRepository<Category> {
     List<Category> findAllByBook(Book book);
 
     List<Category> findAllByBookAndTypeAndEnable(Book book, Integer type, Boolean enable);
+
+    long countByBookAndType(Book book, Integer type);
 
 }

@@ -31,6 +31,9 @@ public class TagService {
     @Value("${category.max.level}")
     private Integer maxLevel;
 
+    @Value("${tag.max.count}")
+    private Integer maxCount;
+
     public List<TagTreeVO> getAllTree(TagQueryRequest request, Integer userSignInId) {
         Book book = userService.getUser(userSignInId).getDefaultBook();
         Specification<Tag> specification = TagSpec.buildSpecification(request, book);
@@ -71,10 +74,6 @@ public class TagService {
     public TagVOForList add(TagAddRequest request, Integer userSignInId) {
         User user = userService.getUser(userSignInId);
         Book book = user.getDefaultBook();
-        // 不能重复
-        if (tagRepository.findByBookAndName(book, request.getName()).isPresent()) {
-            throw new NameExistsException();
-        }
         Tag parent = null;
         if (request.getParentId() != null) {
             parent = tagRepository.findOneByBookAndId(book, request.getParentId()).orElseThrow(ItemNotFoundException::new);
@@ -84,6 +83,13 @@ public class TagService {
             if (parent.getLevel().equals(maxLevel-1)) {
                 throw new CategoryLevelException();
             }
+        }
+        if (tagRepository.countByBook(book) >= maxCount) {
+            throw new TagMaxCountException();
+        }
+        // 不能重复
+        if (tagRepository.findByBookAndName(book, request.getName()).isPresent()) {
+            throw new NameExistsException();
         }
         Tag po = new Tag();
         po.setName(request.getName());

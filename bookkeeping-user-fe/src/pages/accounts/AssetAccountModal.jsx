@@ -76,6 +76,9 @@ export default () => {
         <Form.Item label={t('account.current.balance')} name="balance" rules={balanceRequiredRules()} labelCol={{ style: { width: 68 } }}>
           <Input disabled={type === 2} />
         </Form.Item>
+        <Form.Item label={t('account.card.no')} name="no" labelCol={{ style: { width: 68 } }}>
+          <Input />
+        </Form.Item>
         <Row gutter={8}>
           <Col span={6}>
             <Form.Item label={t('expenseable')} valuePropName="checked" name="expenseable">

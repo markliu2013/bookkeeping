@@ -21,11 +21,16 @@ public class PayeeExceptionHandler {
     @Resource
     private MessageSource messageSource;
 
-
     @ExceptionHandler(value = PayeeHasDealException.class)
     @ResponseBody
     public BaseResponse handleException(PayeeHasDealException e) {
         return new ErrorResponse(409, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
+    }
+
+    @ExceptionHandler(value = PayeeMaxCountException.class)
+    @ResponseBody
+    public BaseResponse handleException(PayeeMaxCountException e) {
+        return new ErrorResponse(410, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
     }
 
 }

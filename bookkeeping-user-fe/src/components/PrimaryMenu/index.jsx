@@ -8,7 +8,7 @@ import styles from './index.less';
 export default () => {
 
   return (
-    <Menu theme={"dark"} mode={"inline"} defaultOpenKeys={['sub2']} className={styles['menu']}>
+    <Menu theme={"dark"} mode={"inline"} defaultOpenKeys={['sub2', 'sub3']} className={styles['menu']}>
       <Menu.SubMenu key="sub1" icon={<AreaChartOutlined />} title={t('menu.report')}>
         <Menu.Item key="11"><NavLink to='/dashboard'>{t('menu.overview')}</NavLink></Menu.Item>
         <Menu.Item key="12"><NavLink to='/reports/expense-category'>{t('menu.expense.category.reports')}</NavLink></Menu.Item>

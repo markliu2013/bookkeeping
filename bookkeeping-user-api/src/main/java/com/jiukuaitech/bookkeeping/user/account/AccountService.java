@@ -9,6 +9,7 @@ import com.jiukuaitech.bookkeeping.user.checking_account.CheckingAccount;
 import com.jiukuaitech.bookkeeping.user.credit_account.CreditAccount;
 import com.jiukuaitech.bookkeeping.user.debt_account.DebtAccount;
 import com.jiukuaitech.bookkeeping.user.group.Group;
+import com.jiukuaitech.bookkeeping.user.group.GroupMaxCountException;
 import com.jiukuaitech.bookkeeping.user.user.User;
 import com.jiukuaitech.bookkeeping.user.credit_account.CreditAccountAddRequest;
 import com.jiukuaitech.bookkeeping.user.currency.CurrencyService;
@@ -17,11 +18,13 @@ import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.transaction.TransactionRepository;
 import com.jiukuaitech.bookkeeping.user.transfer.TransferRepository;
 import com.jiukuaitech.bookkeeping.user.user.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +48,9 @@ public class AccountService {
 
     @Resource
     private CurrencyService currencyService;
+
+    @Value("${account.max.count}")
+    private Integer accountMaxCount;
 
     public List<AccountVOForExtend> getEnable(Integer userSignInId) {
         Group group = userService.getUser(userSignInId).getDefaultGroup();
@@ -210,6 +216,9 @@ public class AccountService {
 
     public boolean add(Integer type, AccountAddRequest request, Integer userSignInId) {
         Group group = userService.getUser(userSignInId).getDefaultGroup();
+        if (accountRepository.countByGroup(group) >= accountMaxCount) {
+            throw new AccountMaxCountException();
+        }
         if (accountRepository.findOneByGroupAndName(group, request.getName()).isPresent()) {
             throw new AccountNameExistsException();
         }
@@ -231,7 +240,7 @@ public class AccountService {
             case 4:
                 po = new AssetAccount();
                 request.copyPrimitive(po);
-                ((AssetAccount)po).setAsOfDate(System.currentTimeMillis());
+                ((AssetAccount)po).setAsOfDate(Instant.now().toEpochMilli());
                 break;
         }
         po.setGroup(group);

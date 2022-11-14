@@ -27,4 +27,10 @@ public class TagExceptionHandler {
         return new ErrorResponse(409, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
     }
 
+    @ExceptionHandler(value = TagMaxCountException.class)
+    @ResponseBody
+    public BaseResponse handleException(TagMaxCountException e) {
+        return new ErrorResponse(410, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
+    }
+
 }

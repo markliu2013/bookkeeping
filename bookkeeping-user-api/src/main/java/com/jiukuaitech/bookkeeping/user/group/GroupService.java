@@ -6,6 +6,7 @@ import com.jiukuaitech.bookkeeping.user.book.BookRepository;
 import com.jiukuaitech.bookkeeping.user.currency.CurrencyService;
 import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.exception.PermissionException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,6 +38,9 @@ public class GroupService {
     @Resource
     private UserService userService;
 
+    @Value("${group.max.count}")
+    private Integer groupMaxCount;
+
     public Page<GroupVOForList> query(Pageable page, Integer userSignInId) {
         Specification<Group> specification = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -62,8 +66,11 @@ public class GroupService {
 
     @Transactional
     public boolean add(GroupAddRequest request, Integer userSignInId) {
-        currencyService.checkCode(request.getDefaultCurrencyCode());
         User user = userService.getUser(userSignInId);
+        if (groupRepository.countByCreator(user) >= groupMaxCount) {
+            throw new GroupMaxCountException();
+        }
+        currencyService.checkCode(request.getDefaultCurrencyCode());
         Group po = new Group();
         po.setName(request.getName());
         po.setNotes(request.getNotes());

@@ -58,4 +58,10 @@ public class CategoryExceptionHandler {
         return new ErrorResponse(705, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
     }
 
+    @ExceptionHandler(value = CategoryMaxCountException.class)
+    @ResponseBody
+    public BaseResponse handleException(CategoryMaxCountException e) {
+        return new ErrorResponse(706, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
+    }
+
 }

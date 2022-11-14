@@ -6,6 +6,7 @@ import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.exception.NameExistsException;
 import com.jiukuaitech.bookkeeping.user.user.User;
 import com.jiukuaitech.bookkeeping.user.user.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,6 +26,9 @@ public class PayeeService {
 
     @Resource
     private DealRepository dealRepository;
+
+    @Value("${payee.max.count}")
+    private Integer maxCount;
 
     public Page<PayeeVOForList> query(PayeeQueryRequest request, Pageable page, Integer userSignInId) {
         Book book = userService.getUser(userSignInId).getDefaultBook();
@@ -63,6 +67,9 @@ public class PayeeService {
         // 不能重复
         if (payeeRepository.findByBookAndName(book, request.getName()).isPresent()) {
             throw new NameExistsException();
+        }
+        if (payeeRepository.countByBook(book) >= maxCount) {
+            throw new PayeeMaxCountException();
         }
         Payee po = new Payee();
         po.setName(request.getName());

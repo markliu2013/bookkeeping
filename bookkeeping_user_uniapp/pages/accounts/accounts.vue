@@ -50,13 +50,17 @@ export default {
 			queryParams: {
 				page: 1,
 				size: 15,
-				sort: 'id,desc',
+				sort: '',
 			},
 			loading: false,
 			status: 'loadmore',
 			loadmoreText: " ",
 			showSortList: false,
 			sortList: [
+				{
+					name: '默认排序',
+					value: ''
+				},
 				{
 					name: '余额排序',
 					value: 'balance,desc'

@@ -6,6 +6,8 @@ import com.jiukuaitech.bookkeeping.user.validation.TimeValidator;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 public class BalanceFlowAddRequest {
@@ -21,7 +23,7 @@ public class BalanceFlowAddRequest {
 
     public void copyPrimitive(BalanceFlow po) {
         if (createTime == null) {
-            po.setCreateTime(System.currentTimeMillis());
+            po.setCreateTime(Instant.now().toEpochMilli());
         } else {
             po.setCreateTime(createTime);
         }

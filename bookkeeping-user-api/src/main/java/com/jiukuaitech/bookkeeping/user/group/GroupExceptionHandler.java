@@ -26,4 +26,11 @@ public class GroupExceptionHandler {
     public BaseResponse handleException(GroupHasBookException e) {
         return new ErrorResponse(601, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
     }
+
+    @ExceptionHandler(value = GroupMaxCountException.class)
+    @ResponseBody
+    public BaseResponse handleException(GroupMaxCountException e) {
+        return new ErrorResponse(602, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
+    }
+
 }

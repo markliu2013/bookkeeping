@@ -28,6 +28,12 @@ public class AccountExceptionHandler {
         return new ErrorResponse(409, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
     }
 
+    @ExceptionHandler(value = AccountMaxCountException.class)
+    @ResponseBody
+    public BaseResponse handleException(AccountMaxCountException e) {
+        return new ErrorResponse(501, messageSource.getMessage(e.getClass().getSimpleName(), null, LANG));
+    }
+
     @ExceptionHandler(value = AccountHasTransactionException.class)
     @ResponseBody
     public BaseResponse handleException(AccountHasTransactionException e) {

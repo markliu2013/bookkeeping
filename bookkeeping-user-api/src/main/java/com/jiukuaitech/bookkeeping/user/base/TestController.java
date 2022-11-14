@@ -13,7 +13,7 @@ public class TestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/test1")
     public BaseResponse handleTest1() {
-        return new DataResponse<>(9);
+        return new DataResponse<>(10);
     }
 
     @GetMapping("/test2")

@@ -18,4 +18,6 @@ public interface PayeeRepository extends HasBookRepository<Payee> {
 
     List<Payee> findByBookAndEnableAndIncomeable(Book book, Boolean enable, Boolean incomeable);
 
+    long countByBook(Book book);
+
 }

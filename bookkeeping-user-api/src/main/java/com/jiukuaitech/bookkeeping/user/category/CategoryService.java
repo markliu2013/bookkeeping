@@ -35,6 +35,9 @@ public class CategoryService {
     @Value("${category.max.level}")
     private Integer maxLevel;
 
+    @Value("${category.max.count}")
+    private Integer maxCount;
+
     /*
     删除分类需要检查：1. 有无支出；2. 有无账本的默认; 3. 有无子类
      */
@@ -79,6 +82,9 @@ public class CategoryService {
             if (parent.getLevel().equals(maxLevel-1)) {
                 throw new CategoryLevelException();
             }
+        }
+        if (categoryRepository.countByBookAndType(book, type) >= maxCount) {
+            throw new CategoryMaxCountException();
         }
         if (categoryRepository.findOneByBookAndNameAndParentAndType(book, request.getName(), parent, type).isPresent()) {
             throw new CategoryNameExistsException();

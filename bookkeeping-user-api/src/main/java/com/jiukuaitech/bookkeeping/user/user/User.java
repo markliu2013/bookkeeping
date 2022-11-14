@@ -62,6 +62,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     @NotNull
     private Boolean enable = true;
+
+    @Column(nullable = false)
+    @NotNull
+    @TimeValidator
+    private Long registerTime; //注册时间
     
     public User() { }
 

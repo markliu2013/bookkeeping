@@ -186,6 +186,7 @@ export default () => {
       columns={columns}
       expandable={{
         expandedRowRender: record => <Descriptions size="small" bordered column={5}>
+          <Descriptions.Item label={t('account.card.no')}>{record.no ? record.no : t('null')}</Descriptions.Item>
           <Descriptions.Item label={t('account.initial.balance')}>{record.initialBalance}</Descriptions.Item>
           <Descriptions.Item label={t('notes')}>{record.notes ? record.notes : t('null')}</Descriptions.Item>
         </Descriptions>,

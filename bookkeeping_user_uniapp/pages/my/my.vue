@@ -18,7 +18,7 @@
 		<uni-list :border="false" style="margin-top: 20px;">
 			<uni-list-item title="账本管理" clickable link @click="openBooks" />
 			<uni-list-item title="API地址" :rightText="apiUrl" />
-			<uni-list-item title="当前版本号" rightText="1.0.1" />
+			<uni-list-item title="当前版本号" rightText="1.0.2" />
 		</uni-list>
 		<view class="u-content">
 			<u-button type="primary" @click="logout" text="退出登录" :customStyle="{marginTop: '15px'}"></u-button>

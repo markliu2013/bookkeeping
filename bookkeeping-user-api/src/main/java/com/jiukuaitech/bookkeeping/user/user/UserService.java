@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -59,7 +60,8 @@ public class UserService {
         }
         user.setNickName(request.getUserName());
         user.setIp(CommonUtils.getRealIP(httpServletRequest));
-        user.setVipTime(System.currentTimeMillis());
+        user.setVipTime(Instant.now().toEpochMilli());
+        user.setRegisterTime(Instant.now().toEpochMilli());
         // 注册之后，默认一个组
         Group group = new Group();
         group.setName("默认组");

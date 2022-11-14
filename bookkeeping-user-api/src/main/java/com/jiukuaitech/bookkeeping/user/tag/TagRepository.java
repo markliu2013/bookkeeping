@@ -10,8 +10,6 @@ import java.util.Optional;
 @Repository
 public interface TagRepository extends HasBookRepository<Tag> {
 
-    List<Tag> findAllByBook(Book book);
-
     // 添加时判断名称是否重复
     Optional<Tag> findByBookAndName(Book book, String name);
 
@@ -22,5 +20,7 @@ public interface TagRepository extends HasBookRepository<Tag> {
     List<Tag> findByBookAndEnableAndIncomeable(Book book, Boolean enable, Boolean incomeable);
 
     List<Tag> findByBookAndEnableAndTransferable(Book book, Boolean enable, Boolean transferable);
+
+    long countByBook(Book book);
 
 }
