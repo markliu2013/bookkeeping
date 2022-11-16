@@ -131,6 +131,13 @@ public class CalendarUtils {
         return new Long[]{ start.getTimeInMillis(), end.getTimeInMillis() };
     }
 
+    public static Long[] getIn1Day() {
+        Calendar start = Calendar.getInstance();
+        start.add(Calendar.HOUR, -24);
+        Calendar end = Calendar.getInstance();
+        return new Long[]{ start.getTimeInMillis(), end.getTimeInMillis() };
+    }
+
     public static Long[] getIn30Days() {
         Calendar start = Calendar.getInstance();
         start.add(Calendar.DATE, -30);

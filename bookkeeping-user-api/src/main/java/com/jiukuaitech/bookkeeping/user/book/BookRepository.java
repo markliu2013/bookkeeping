@@ -14,4 +14,6 @@ public interface BookRepository extends BaseRepository<Book, Integer> {
 
     Optional<Book> findOneByGroupAndName(Group group, String name);
 
+    long deleteByGroup_id(Integer groupId);
+
 }

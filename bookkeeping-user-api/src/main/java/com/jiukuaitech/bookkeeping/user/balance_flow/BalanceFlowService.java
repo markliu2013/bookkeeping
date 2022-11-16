@@ -58,18 +58,17 @@ public class BalanceFlowService {
         BalanceFlowQueryResultVO result = new BalanceFlowQueryResultVO();
         User user = userService.getUser(userSignInId);
         Group group = user.getDefaultGroup();
-        String defaultCurrencyCode = group.getDefaultCurrencyCode();
         Specification<BalanceFlow> specification = BalanceFlowSpec.buildFlowSpecification(request, group);
         Page<BalanceFlow> poPage = balanceFlowRepository.findAll(specification, page);
         Page<BalanceFlowVOForList> voPage = poPage.map(flow-> {
             BalanceFlowVOForList vo = BalanceFlowVOForList.fromEntity(flow);
             vo.setCurrencyCode(flow.getAccount().getCurrencyCode());
             if (flow.getType() == 1 || flow.getType() == 2) {
-                if (defaultCurrencyCode.equals(flow.getAccount().getCurrencyCode())) {
+                if (flow.getBook().getDefaultCurrencyCode().equals(flow.getAccount().getCurrencyCode())) {
                     vo.setNeedConvert(false);
                 } else {
                     vo.setNeedConvert(true);
-                    vo.setToCurrencyCode(defaultCurrencyCode);
+                    vo.setToCurrencyCode(flow.getBook().getDefaultCurrencyCode());
                 }
             } else if (flow.getType() == 3) {
                 String toCurrencyCode = ((Transfer) flow).getTo().getCurrencyCode();
@@ -104,17 +103,15 @@ public class BalanceFlowService {
     public BalanceFlowVOForList get(Integer id, Integer userSignInId) {
         User user = userService.getUser(userSignInId);
         Book book = user.getDefaultBook();
-        Group group = user.getDefaultGroup();
-        String defaultCurrencyCode = group.getDefaultCurrencyCode();
         BalanceFlow flow = balanceFlowRepository.findOneByBookAndId(book, id).orElseThrow(ItemNotFoundException::new);
         BalanceFlowVOForList vo = BalanceFlowVOForList.fromEntity(flow);
         vo.setCurrencyCode(flow.getAccount().getCurrencyCode());
         if (flow.getType() == 1 || flow.getType() == 2) {
-            if (defaultCurrencyCode.equals(flow.getAccount().getCurrencyCode())) {
+            if (flow.getBook().getDefaultCurrencyCode().equals(flow.getAccount().getCurrencyCode())) {
                 vo.setNeedConvert(false);
             } else {
                 vo.setNeedConvert(true);
-                vo.setToCurrencyCode(defaultCurrencyCode);
+                vo.setToCurrencyCode(flow.getBook().getDefaultCurrencyCode());
             }
         } else if (flow.getType() == 3) {
             String toCurrencyCode = ((Transfer) flow).getTo().getCurrencyCode();

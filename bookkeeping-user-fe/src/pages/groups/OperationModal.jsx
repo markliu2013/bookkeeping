@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'umi';
-import {Modal, Form, Input, message, Select} from 'antd';
+import { Form, Input, Select} from 'antd';
 import { create, update } from '@/services/group';
-import {getNull, validateForm} from "@/utils/util";
+import {getNull} from "@/utils/util";
 import t from "@/utils/translate";
 import FormModal from "@/components/FormModal";
 import {nameRules, notesRules, requiredRules} from "@/utils/rules";
-import styles from './index.less';
 import {useCurrencyResponseSelectData} from "@/utils/hooks";
+import styles from './index.less';
 
 export default () => {
 

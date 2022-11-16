@@ -20,10 +20,14 @@ import com.jiukuaitech.bookkeeping.user.account.AccountRepository;
 import com.jiukuaitech.bookkeeping.user.balance_flow.AmountInvalidateException;
 import com.jiukuaitech.bookkeeping.user.exception.InputNotValidException;
 import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLog;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLogRepository;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLogService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Service
 public class DealService {
@@ -52,37 +56,49 @@ public class DealService {
     @Resource
     private CategoryRepository categoryRepository;
 
+    @Resource
+    private UserActionLogRepository userActionLogRepository;
+
+    @Resource
+    private UserActionLogService userActionLogService;
+
     @Transactional
     // 正常添加amount只能为正，退款的添加amount只能为负。
     public Deal add(Integer type, DealAddRequest request, Integer userSignInId, boolean refundFlag) {
         //检查Category有没有重复
         CategoryRelationAddRequest.checkCategory(request.getCategories());
         User user = userService.getUser(userSignInId);
+        // 不能频繁添加，防止用户恶意操作
+        userActionLogService.check(user);
         Book book = user.getDefaultBook();
         Deal po = null;
+        if (type == 1) {
+            po = new Expense();
+        } else if (type == 2) {
+            po = new Income();
+        }
         BigDecimal amount = request.getCategories().stream().map(CategoryRelationAddRequest::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal convertedAmount = request.getCategories().stream().map(CategoryRelationAddRequest::getConvertedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         if (refundFlag && amount.compareTo(BigDecimal.ZERO) > 0) {
             throw new AmountInvalidateException();
         }
         if (!refundFlag && amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new AmountInvalidateException();
         }
-        if (refundFlag && convertedAmount.compareTo(BigDecimal.ZERO) > 0) {
-            throw new AmountInvalidateException();
-        }
-        if (!refundFlag && convertedAmount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new AmountInvalidateException();
-        }
-        if (type == 1) {
-            po = new Expense();
-        } else if (type == 2) {
-            po = new Income();
-        }
         po.setAmount(amount);
-        po.setConvertedAmount(convertedAmount);
         Account account = accountRepository.findOneByGroupAndId(user.getDefaultGroup(), request.getAccountId()).orElseThrow(AccountInvalidateException::new);
         po.setAccount(account);
+        if (account.getCurrencyCode().equals(book.getDefaultCurrencyCode())) {
+            po.setConvertedAmount(amount);
+        } else {
+            BigDecimal convertedAmount = request.getCategories().stream().map(CategoryRelationAddRequest::getConvertedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            if (refundFlag && convertedAmount.compareTo(BigDecimal.ZERO) > 0) {
+                throw new AmountInvalidateException();
+            }
+            if (!refundFlag && convertedAmount.compareTo(BigDecimal.ZERO) < 0) {
+                throw new AmountInvalidateException();
+            }
+            po.setConvertedAmount(convertedAmount);
+        }
         po.setCreator(user);
         po.setBook(user.getDefaultBook());
         po.setGroup(user.getDefaultGroup());
@@ -91,10 +107,11 @@ public class DealService {
             po.setPayee(payee);
         }
         request.copyTags(po, tagRepository.findByBookAndEnable(book, true));
-        request.copyCategories(po, categoryRepository.findAllByBook(book));
+        request.copyCategories(po, categoryRepository.findAllByBook(book), book);
         request.copyPrimitive(po);
         dealRepository.save(po);
         confirmBalance(po, type);
+        userActionLogRepository.save(new UserActionLog(user, 1, Instant.now().toEpochMilli()));
         return po;
     }
 
@@ -107,13 +124,14 @@ public class DealService {
         Book book = user.getDefaultBook();
         Deal po = dealRepository.findOneByBookAndId(book, id).orElseThrow(ItemNotFoundException::new);
         BigDecimal newAmount = request.getCategories().stream().map(CategoryRelationAddRequest::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal newConvertedAmount = request.getCategories().stream().map(CategoryRelationAddRequest::getConvertedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         //正数不能改负数，负数不能改正数
         // 不能改变正负符号，也就是不能改变是否是退款的情况。
-        if (po.getAmount().compareTo(BigDecimal.ZERO) > 0 && newAmount.compareTo(BigDecimal.ZERO) < 0) throw new AmountInvalidateException();
-        if (po.getAmount().compareTo(BigDecimal.ZERO) < 0 && newAmount.compareTo(BigDecimal.ZERO) > 0) throw new AmountInvalidateException();
-        if (po.getConvertedAmount().compareTo(BigDecimal.ZERO) > 0 && newConvertedAmount.compareTo(BigDecimal.ZERO) < 0) throw new AmountInvalidateException();
-        if (po.getConvertedAmount().compareTo(BigDecimal.ZERO) < 0 && newConvertedAmount.compareTo(BigDecimal.ZERO) > 0) throw new AmountInvalidateException();
+        if (po.getAmount().compareTo(BigDecimal.ZERO) > 0 && newAmount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new AmountInvalidateException();
+        }
+        if (po.getAmount().compareTo(BigDecimal.ZERO) < 0 && newAmount.compareTo(BigDecimal.ZERO) > 0) {
+            throw new AmountInvalidateException();
+        }
         boolean refundFlag = false;//是否更新账户金额
         if (po.getAmount().compareTo(newAmount) != 0) {
             refundFlag = true;
@@ -126,9 +144,21 @@ public class DealService {
         if (refundFlag) {
             refundBalance(po, type);
         }
-        po.setAccount(accountRepository.findOneByGroupAndId(user.getDefaultGroup(), request.getAccountId()).orElseThrow(AccountInvalidateException::new));
+        Account account = accountRepository.findOneByGroupAndId(user.getDefaultGroup(), request.getAccountId()).orElseThrow(AccountInvalidateException::new);
+        po.setAccount(account);
         po.setAmount(newAmount);
-        po.setConvertedAmount(newConvertedAmount);
+        if (account.getCurrencyCode().equals(book.getDefaultCurrencyCode())) {
+            po.setConvertedAmount(newAmount);
+        } else {
+            BigDecimal newConvertedAmount = request.getCategories().stream().map(CategoryRelationAddRequest::getConvertedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            if (po.getConvertedAmount().compareTo(BigDecimal.ZERO) > 0 && newConvertedAmount.compareTo(BigDecimal.ZERO) < 0) {
+                throw new AmountInvalidateException();
+            }
+            if (po.getConvertedAmount().compareTo(BigDecimal.ZERO) < 0 && newConvertedAmount.compareTo(BigDecimal.ZERO) > 0) {
+                throw new AmountInvalidateException();
+            }
+            po.setConvertedAmount(newConvertedAmount);
+        }
         if (request.getPayeeId() != null) {
             Payee payee = payeeRepository.findOneByBookAndId(book, request.getPayeeId()).orElseThrow(InputNotValidException::new);
             po.setPayee(payee);
@@ -136,7 +166,7 @@ public class DealService {
             po.setPayee(null);
         }
         request.updateTags(po, tagRepository.findByBookAndEnable(book, true));
-        request.updateCategories(po, categoryRepository.findAllByBook(book));
+        request.updateCategories(po, categoryRepository.findAllByBook(book), book);
         request.updatePrimitive(po);
         dealRepository.save(po);
         if (refundFlag) {

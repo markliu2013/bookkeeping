@@ -22,4 +22,7 @@ public class BookAddRequest {
     private Boolean timeEnable = false;
     private Boolean imageEnable = false;
 
+    @NotBlank
+    private String defaultCurrencyCode;
+
 }

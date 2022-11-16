@@ -79,6 +79,7 @@ public class GroupService {
         groupRepository.save(po);
         Book book = new Book();
         book.setName("默认账本");
+        book.setDefaultCurrencyCode(po.getDefaultCurrencyCode());
         book.setGroup(po);
         bookRepository.save(book);
         po.setDefaultBook(book);
@@ -100,6 +101,7 @@ public class GroupService {
 
     @Transactional
     public boolean remove(Integer id, Integer userSignInId) {
+        bookRepository.deleteByGroup_id(id);
         // 检查关联性
         if (bookRepository.countByGroup_id(id) > 0) {
             throw new GroupHasBookException();

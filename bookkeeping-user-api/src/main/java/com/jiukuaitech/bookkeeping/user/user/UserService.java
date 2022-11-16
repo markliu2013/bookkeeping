@@ -70,6 +70,7 @@ public class UserService {
 
         Book book = new Book();
         book.setName("默认账本");
+        book.setDefaultCurrencyCode("CNY");
         book.setGroup(group);
         bookRepository.save(book);
 

@@ -70,6 +70,11 @@ export default () => {
       dataIndex: 'name',
     },
     {
+      title: t('default.currency'),
+      dataIndex: 'defaultCurrencyCode',
+      width: 70,
+    },
+    {
       title: t('book.group'),
       dataIndex: 'group',
       render: value => <>{value ? value.name : null}</>

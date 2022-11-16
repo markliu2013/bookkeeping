@@ -11,6 +11,9 @@ import com.jiukuaitech.bookkeeping.user.group.Group;
 import com.jiukuaitech.bookkeeping.user.tag.TagRepository;
 import com.jiukuaitech.bookkeeping.user.user.User;
 import com.jiukuaitech.bookkeeping.user.user.UserService;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLog;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLogRepository;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLogService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Service
 public class TransferService {
@@ -36,6 +40,12 @@ public class TransferService {
     @Resource
     private TagRepository tagRepository;
 
+    @Resource
+    private UserActionLogRepository userActionLogRepository;
+
+    @Resource
+    private UserActionLogService userActionLogService;
+
     @Transactional
     public boolean add(TransferAddRequest request, Integer userSignInId) {
         // 转出和转入不能相同
@@ -43,6 +53,9 @@ public class TransferService {
             throw new TransferFromEqualsToException();
         }
         User user = userService.getUser(userSignInId);
+
+        // 不能频繁添加，防止用户恶意操作
+        userActionLogService.check(user);
         Group group = user.getDefaultGroup();
         Book book = user.getDefaultBook();
 
@@ -67,6 +80,7 @@ public class TransferService {
         if (request.getConfirmed()) {
             confirmBalance(po);
         }
+        userActionLogRepository.save(new UserActionLog(user, 1, Instant.now().toEpochMilli()));
         return true;
     }
 

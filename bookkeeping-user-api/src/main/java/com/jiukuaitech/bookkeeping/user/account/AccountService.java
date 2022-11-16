@@ -9,7 +9,6 @@ import com.jiukuaitech.bookkeeping.user.checking_account.CheckingAccount;
 import com.jiukuaitech.bookkeeping.user.credit_account.CreditAccount;
 import com.jiukuaitech.bookkeeping.user.debt_account.DebtAccount;
 import com.jiukuaitech.bookkeeping.user.group.Group;
-import com.jiukuaitech.bookkeeping.user.group.GroupMaxCountException;
 import com.jiukuaitech.bookkeeping.user.user.User;
 import com.jiukuaitech.bookkeeping.user.credit_account.CreditAccountAddRequest;
 import com.jiukuaitech.bookkeeping.user.currency.CurrencyService;
@@ -18,6 +17,9 @@ import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.transaction.TransactionRepository;
 import com.jiukuaitech.bookkeeping.user.transfer.TransferRepository;
 import com.jiukuaitech.bookkeeping.user.user.UserService;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLog;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLogRepository;
+import com.jiukuaitech.bookkeeping.user.user_log.UserActionLogService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +49,13 @@ public class AccountService {
     private TransferRepository transferRepository;
 
     @Resource
+    private UserActionLogRepository userActionLogRepository;
+
+    @Resource
     private CurrencyService currencyService;
+
+    @Resource
+    private UserActionLogService userActionLogService;
 
     @Value("${account.max.count}")
     private Integer accountMaxCount;
@@ -108,6 +116,7 @@ public class AccountService {
     @Transactional
     public AccountVOForExtend adjustBalance(Integer id, AdjustBalanceAddRequest request, Integer userSignInId) {
         User user = userService.getUser(userSignInId);
+
         Group group = user.getDefaultGroup();
         Account account = accountRepository.findOneByGroupAndId(group, id).orElseThrow(ItemNotFoundException::new);
         if (account.getBalance().compareTo(request.getBalance()) == 0) {
@@ -132,6 +141,7 @@ public class AccountService {
         po.setStatus(1);
 
         adjustBalanceRepository.save(po);
+        userActionLogRepository.save(new UserActionLog(user, 1, Instant.now().toEpochMilli()));
         return AccountVOForExtend.fromEntity(po.getAccount());
     }
 

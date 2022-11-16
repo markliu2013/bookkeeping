@@ -3,8 +3,10 @@ package com.jiukuaitech.bookkeeping.user.book;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jiukuaitech.bookkeeping.user.currency.CurrencyService;
 import com.jiukuaitech.bookkeeping.user.expense_category.ExpenseCategory;
 import com.jiukuaitech.bookkeeping.user.group.Group;
+import com.jiukuaitech.bookkeeping.user.group.GroupMaxCountException;
 import com.jiukuaitech.bookkeeping.user.income_category.IncomeCategory;
 import com.jiukuaitech.bookkeeping.user.user.User;
 import com.jiukuaitech.bookkeeping.user.user.UserGroupRelation;
@@ -14,6 +16,7 @@ import com.jiukuaitech.bookkeeping.user.exception.NameExistsException;
 import com.jiukuaitech.bookkeeping.user.exception.PermissionException;
 import com.jiukuaitech.bookkeeping.user.user.UserGroupRelationRepository;
 import com.jiukuaitech.bookkeeping.user.user.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,6 +40,12 @@ public class BookService {
     @Resource
     private AccountRepository accountRepository;
 
+    @Resource
+    private CurrencyService currencyService;
+
+    @Value("${book.max.count}")
+    private Integer maxCount;
+
     public Page<BookVOForList> query(Pageable page, Integer userSignInId) {
         Specification<Book> specification = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -59,8 +68,13 @@ public class BookService {
         if (bookRepository.findOneByGroupAndName(group, request.getName()).isPresent()) {
             throw new NameExistsException();
         }
+        if (bookRepository.countByGroup_id(group.getId()) >= maxCount) {
+            throw new BookMaxCountException();
+        }
+        currencyService.checkCode(request.getDefaultCurrencyCode());
         Book po = new Book();
         po.setName(request.getName());
+        po.setDefaultCurrencyCode(request.getDefaultCurrencyCode());
         po.setNotes(request.getNotes());
         po.setGroup(group);
         po.setDescriptionEnable(request.getDescriptionEnable());
@@ -135,9 +149,10 @@ public class BookService {
     }
 
     public boolean remove(Integer id, Integer userSignInId) {
-        Group group = userService.getUser(userSignInId).getDefaultGroup();
+        User user = userService.getUser(userSignInId);
+        Group group = user.getDefaultGroup();
         Book po = bookRepository.findOneByGroupAndId(group, id).orElseThrow(ItemNotFoundException::new);
-        UserGroupRelation userGroupRelation = userGroupRelationRepository.findOneByUserAndGroup(new User(userSignInId), po.getGroup());
+        UserGroupRelation userGroupRelation = userGroupRelationRepository.findOneByUserAndGroup(user, group);
         if (userGroupRelation == null || userGroupRelation.getRole() != 1) {
             throw new PermissionException("No Permission");
         }

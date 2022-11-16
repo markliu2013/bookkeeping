@@ -13,9 +13,9 @@ export default () => {
   const [form] = Form.useForm();
 
   const { visible, currentItem } = useSelector(state => state.modal);
-  const { defaultGroup } = useSelector(state => state.session);
+  const { defaultBook } = useSelector(state => state.session);
   useEffect(() => {
-    if (!defaultGroup) dispatch({ type: 'session/fetchSession' });
+    if (!defaultBook) dispatch({ type: 'session/fetchSession' });
   }, []);
 
   const [initialValues, setInitialValues] = useState({})
@@ -43,8 +43,8 @@ export default () => {
           <Input />
         </Form.Item>
         {
-          defaultGroup && defaultGroup.defaultCurrencyCode !== currentItem.currencyCode ?
-          <Form.Item label={t('convertCurrency')+defaultGroup.defaultCurrencyCode} name="convertedAmount" rules={amountRequiredRules()}>
+          defaultBook && defaultBook.defaultCurrencyCode !== currentItem.currencyCode ?
+          <Form.Item label={t('convertCurrency')+defaultBook.defaultCurrencyCode} name="convertedAmount" rules={amountRequiredRules()}>
             <Input />
           </Form.Item> : null
         }

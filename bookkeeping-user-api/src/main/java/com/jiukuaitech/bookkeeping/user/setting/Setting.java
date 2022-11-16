@@ -15,10 +15,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Setting extends BaseEntity {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    
     @Column(name= "c_key", length = 16, nullable = false, unique = true)
     @NotNull
     @NameValidator

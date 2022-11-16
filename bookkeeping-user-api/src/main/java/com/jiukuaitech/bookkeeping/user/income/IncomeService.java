@@ -39,7 +39,12 @@ public class IncomeService {
         Page<DealVOForList> voPage = poPage.map(income -> {
             DealVOForList vo = DealVOForList.fromEntity(income);
             vo.setCurrencyCode(income.getAccount().getCurrencyCode());
-            vo.setNeedConvert(!defaultGroup.getDefaultCurrencyCode().equals(income.getAccount().getCurrencyCode()));
+            if (income.getBook().getDefaultCurrencyCode().equals(income.getAccount().getCurrencyCode())) {
+                vo.setNeedConvert(false);
+            } else {
+                vo.setNeedConvert(true);
+                vo.setToCurrencyCode(income.getBook().getDefaultCurrencyCode());
+            }
             return vo;
         });
         result.setResult(voPage);

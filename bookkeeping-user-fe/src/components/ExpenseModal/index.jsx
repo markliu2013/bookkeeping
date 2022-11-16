@@ -39,11 +39,6 @@ export default () => {
   const { querySimpleResponse } = useSelector(state => state.expenseCategory);
   const [categories] = useCategoryTreeSelectData(querySimpleResponse);
 
-  const { defaultGroup } = useSelector(state => state.session);
-  useEffect(() => {
-    if (!defaultGroup) dispatch({ type: 'session/fetchSession' });
-  }, []);
-
   // TODO 很多地方有这个只加载一次的数据，待优化
   useEffect(() => {
     if (visible) {
@@ -116,14 +111,6 @@ export default () => {
   }
 
   const [accountCurrencyCode, setAccountCurrencyCode] = useState();
-  const [date, setDate] = useState();
-
-  useEffect(() => {
-    if (defaultGroup) {
-      //convert(accountCurrencyCode, defaultGroup.defaultCurrencyCode, 20220811);
-    }
-  }, [accountCurrencyCode, date, defaultGroup]);
-
   const accountChangeHandler = (value) => {
     for (let i = 0; i < accounts.length; i++) {
       if (accounts[i].id === value) {
@@ -145,7 +132,7 @@ export default () => {
         <FormItemDescription />
         <FormItemCreateTime />
         <FormItemAccount data={accounts} required={true} onSelectChange={accountChangeHandler} />
-        <FormListCategory categories={categories} isConvert={defaultGroup && accountCurrencyCode && defaultGroup.defaultCurrencyCode !== accountCurrencyCode} currency={t('convertCurrency')+defaultGroup.defaultCurrencyCode} />
+        <FormListCategory categories={categories} isConvert={defaultBook && accountCurrencyCode && defaultBook.defaultCurrencyCode !== accountCurrencyCode} currency={t('convertCurrency')+defaultBook.defaultCurrencyCode} />
         <FormItemPayee form={form} payees={payees} setPayees={setPayees} type={1} />
         <FormItemTag data={tags} type={1} />
         {(type !== 2) &&

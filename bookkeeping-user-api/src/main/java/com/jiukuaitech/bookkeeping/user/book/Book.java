@@ -55,6 +55,10 @@ public class Book extends NameNotesEnableEntity {
     @NotNull
     private Boolean imageEnable = false;
 
+    @Column(nullable = false, length = 8)
+    @NotNull
+    private String defaultCurrencyCode;//默认的币种
+
     public Book() { }
 
     public Book(Integer id) {

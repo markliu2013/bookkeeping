@@ -1,5 +1,6 @@
 package com.jiukuaitech.bookkeeping.user.category_relation;
 
+import com.jiukuaitech.bookkeeping.user.book.Book;
 import com.jiukuaitech.bookkeeping.user.category.Category;
 import com.jiukuaitech.bookkeeping.user.deal.Deal;
 import com.jiukuaitech.bookkeeping.user.validation.AmountValidator;
@@ -44,20 +45,18 @@ public class CategoryRelationAddRequest {
         }
     }
 
-    public CategoryRelation getRelation(Deal deal) {
+    public CategoryRelation getRelation(Deal deal, Book book) {
         CategoryRelation po = new CategoryRelation();
         po.setAmount(amount);
-        po.setConvertedAmount(getConvertedAmount());
+        if (deal.getAccount().getCurrencyCode().equals(book.getDefaultCurrencyCode())) {
+            po.setConvertedAmount(amount);
+        } else {
+            po.setConvertedAmount(convertedAmount);
+        }
         po.setCategory(new Category(categoryId));
         po.setDeal(deal);
         return po;
     }
 
-    public BigDecimal getConvertedAmount() {
-        if (convertedAmount != null) {
-            return convertedAmount;
-        } else {
-            return amount;
-        }
-    }
+
 }

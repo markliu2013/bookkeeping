@@ -23,11 +23,13 @@ public class BookVOForList {
     private Boolean timeEnable;
     private Boolean imageEnable;
     private Boolean enable;
+    private String defaultCurrencyCode;
 
     public static BookVOForList fromEntity(Book po) {
         BookVOForList vo = new BookVOForList();
         vo.setId(po.getId());
         vo.setName(po.getName());
+        vo.setDefaultCurrencyCode(po.getDefaultCurrencyCode());
         vo.setNotes(po.getNotes());
         vo.setGroup(new HasNameVO(po.getGroup().getId(), po.getGroup().getName()));
         vo.setDescriptionEnable(po.getDescriptionEnable());
