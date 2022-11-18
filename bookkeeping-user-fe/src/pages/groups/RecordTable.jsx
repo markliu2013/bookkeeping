@@ -73,7 +73,7 @@ export default () => {
         return (
           <Space size="small">
             <Button size="small" onClick={() => updateHandler(record)}>{t('update')}</Button>
-            <Button size="small" onClick={() => deleteHandler(record)}>{t('delete')}</Button>
+            <Button size="small" disabled={defaultGroup && record.id === defaultGroup.id} onClick={() => deleteHandler(record)}>{t('delete')}</Button>
             <Button size="small" disabled={defaultGroup && record.id === defaultGroup.id} onClick={() => setDefaultHandler(record)}>{t('set.default')}</Button>
           </Space>
         )

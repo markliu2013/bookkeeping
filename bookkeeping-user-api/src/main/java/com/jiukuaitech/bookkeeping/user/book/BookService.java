@@ -6,16 +6,12 @@ import java.util.List;
 import com.jiukuaitech.bookkeeping.user.currency.CurrencyService;
 import com.jiukuaitech.bookkeeping.user.expense_category.ExpenseCategory;
 import com.jiukuaitech.bookkeeping.user.group.Group;
-import com.jiukuaitech.bookkeeping.user.group.GroupMaxCountException;
+import com.jiukuaitech.bookkeeping.user.group.GroupRepository;
 import com.jiukuaitech.bookkeeping.user.income_category.IncomeCategory;
-import com.jiukuaitech.bookkeeping.user.user.User;
-import com.jiukuaitech.bookkeeping.user.user.UserGroupRelation;
+import com.jiukuaitech.bookkeeping.user.user.*;
 import com.jiukuaitech.bookkeeping.user.account.AccountRepository;
 import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.exception.NameExistsException;
-import com.jiukuaitech.bookkeeping.user.exception.PermissionException;
-import com.jiukuaitech.bookkeeping.user.user.UserGroupRelationRepository;
-import com.jiukuaitech.bookkeeping.user.user.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,10 +25,13 @@ import javax.persistence.criteria.Predicate;
 public class BookService {
 
     @Resource
-    private UserGroupRelationRepository userGroupRelationRepository;
+    private UserRepository userRepository;
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private GroupRepository groupRepository;
 
     @Resource
     private BookRepository bookRepository;
@@ -152,9 +151,17 @@ public class BookService {
         User user = userService.getUser(userSignInId);
         Group group = user.getDefaultGroup();
         Book po = bookRepository.findOneByGroupAndId(group, id).orElseThrow(ItemNotFoundException::new);
-        UserGroupRelation userGroupRelation = userGroupRelationRepository.findOneByUserAndGroup(user, group);
-        if (userGroupRelation == null || userGroupRelation.getRole() != 1) {
-            throw new PermissionException("No Permission");
+//        UserGroupRelation userGroupRelation = userGroupRelationRepository.findOneByUserAndGroup(user, group);
+//        if (userGroupRelation == null || userGroupRelation.getRole() != 1) {
+//            throw new PermissionException("No Permission");
+//        }
+        if (user.getDefaultBook().getId().equals(po.getId())) {
+            user.setDefaultBook(null);
+            userRepository.save(user);
+        }
+        if (group.getDefaultBook().getId().equals(po.getId())) {
+            group.setDefaultBook(null);
+            groupRepository.save(group);
         }
         bookRepository.delete(po);
         return true;

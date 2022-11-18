@@ -32,7 +32,7 @@ public class Group extends NameNotesEnableEntity {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<UserGroupRelation> relations = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private Book defaultBook; //组默认操作的账本
 
     @Column(nullable = false, length = 8)

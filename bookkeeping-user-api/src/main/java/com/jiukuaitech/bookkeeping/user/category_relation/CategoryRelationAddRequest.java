@@ -34,7 +34,7 @@ public class CategoryRelationAddRequest {
             if (BigDecimal.ZERO.compareTo(item.getAmount()) == 0) {
                 throw new AmountInvalidateException();
             }
-            if (BigDecimal.ZERO.compareTo(item.getConvertedAmount()) == 0) {
+            if (item.getConvertedAmount() != null && BigDecimal.ZERO.compareTo(item.getConvertedAmount()) == 0) {
                 throw new AmountInvalidateException();
             }
             if (set.contains(item.getCategoryId())) {

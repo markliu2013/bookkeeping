@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '/login/login.dart';
 
 class LoginPage extends StatelessWidget {
@@ -14,9 +13,9 @@ class LoginPage extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                width: 200,
-                padding: EdgeInsets.only(top: 50.0, bottom: 60.0),
-                child: Image.asset('assets/images/logo.png')
+                  width: 200,
+                  padding: EdgeInsets.only(top: 50.0, bottom: 60.0),
+                  child: Image.asset('assets/images/logo.png')
               ),
               BlocProvider(
                 create: (_) => LoginBloc(
@@ -24,7 +23,8 @@ class LoginPage extends StatelessWidget {
                     authBloc: BlocProvider.of<AuthBloc>(context)
                 ),
                 child: LoginForm(),
-              )
+              ),
+              SizedBox(height: 50),
             ],
           )
         ),

@@ -101,14 +101,16 @@ public class GroupService {
 
     @Transactional
     public boolean remove(Integer id, Integer userSignInId) {
+        User user = userService.getUser(userSignInId);
+        Group po = groupRepository.findOneByCreatorAndId(user, id).orElseThrow(ItemNotFoundException::new);
+        po.setDefaultBook(null);
         bookRepository.deleteByGroup_id(id);
         // 检查关联性
-        if (bookRepository.countByGroup_id(id) > 0) {
-            throw new GroupHasBookException();
-        }
-        Group po = groupRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-        UserGroupRelation relation = userGroupRelationRepository.findOneByUserAndGroup(new User(userSignInId), po);
-        if (relation == null) throw new PermissionException("No Permission");
+//        if (bookRepository.countByGroup_id(id) > 0) {
+//            throw new GroupHasBookException();
+//        }
+//        UserGroupRelation relation = userGroupRelationRepository.findOneByUserAndGroup(new User(userSignInId), po);
+//        if (relation == null) throw new PermissionException("No Permission");
         userGroupRelationRepository.deleteByGroup(po);
         groupRepository.delete(po);
         return true;
