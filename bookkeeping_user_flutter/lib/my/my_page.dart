@@ -90,8 +90,20 @@ class MyPage extends StatelessWidget {
               ),
               Divider(),
               ListTile(
+                title: const Text('使用指南'),
+                trailing: Icon(Icons.keyboard_arrow_right),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const WebViewPage(title: '使用指南', url: 'https://docs.jz.jiukuaitech.com/'),
+                    ),
+                  );
+                }
+              ),
+              Divider(),
+              ListTile(
                   title: const Text('当前版本号：'),
-                  trailing: const Text('1.0.1')
+                  trailing: const Text('1.0.2')
               ),
               Divider(),
               Container(

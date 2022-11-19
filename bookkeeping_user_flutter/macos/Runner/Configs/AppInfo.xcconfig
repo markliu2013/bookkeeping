@@ -8,7 +8,7 @@
 PRODUCT_NAME = bookkeeping_user_flutter
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.whlcsj.bookkeepingUserFlutter
+PRODUCT_BUNDLE_IDENTIFIER = com.jiukuaitech.bookkeepingUserFlutter
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.whlcsj. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 com.jiukuaitech. All rights reserved.
