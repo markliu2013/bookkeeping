@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   // publicPath: process.env.NODE_ENV === 'production' ? 'http://static.jiukuaitech.com/' : '/',
-  hash: true,
+  // hash: true,
   antd: {
     compact: true
   },
