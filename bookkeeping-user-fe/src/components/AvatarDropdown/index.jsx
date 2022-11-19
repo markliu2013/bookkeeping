@@ -1,7 +1,8 @@
 import {useEffect} from "react";
-import {history, connect, useSelector, useDispatch} from 'umi';
+import {useSelector, useDispatch} from 'umi';
 import { Avatar, Menu, Spin } from 'antd';
 import moment from "moment";
+import { eraseCookie } from '@/utils/util'
 import { LogoutOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import HeaderDropdown from '@/components/HeaderDropdown';
 import UpdatePasswordModal from './UpdatePasswordModal';
@@ -19,7 +20,7 @@ export default (props) => {
   const onMenuClick = (event) => {
     const { key } = event;
     if (key === 'logout') {
-      localStorage.removeItem('userToken');
+      eraseCookie('userToken');
       window.location.href = "/signin";
     }
     if (key === 'updatePassword') {

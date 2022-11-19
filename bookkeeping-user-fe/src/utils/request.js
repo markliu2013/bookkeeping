@@ -42,6 +42,7 @@ request.interceptors.response.use(async (response, options) => {
 
 
 // 添加token https://www.cnblogs.com/qkstart/p/11856168.html
+
 request.interceptors.request.use(async (url, options) => {
   if (
     options.method === 'post' ||
@@ -49,7 +50,6 @@ request.interceptors.request.use(async (url, options) => {
     options.method === 'delete' ||
     options.method === 'get'
   ) {
-    console.log('v124');
     const headers = {
       'User-Token': getUserToken()
     };

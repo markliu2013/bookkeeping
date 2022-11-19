@@ -16,7 +16,7 @@ export default () => {
           <a href="#">{t('footer.download.about')}</a>
         </Space>
       </div>
-      <div>&copy; {new Date().getFullYear()} {t('company.name')}版权所有&nbsp;&nbsp;<a target="_blank" href="https://beian.miit.gov.cn/">{t('footer.no')}</a> v1.0.4</div>
+      <div>&copy; {new Date().getFullYear()} {t('company.name')}版权所有&nbsp;&nbsp;<a target="_blank" href="https://beian.miit.gov.cn/">{t('footer.no')}</a> v1.0.5</div>
     </Space>
   );
 };

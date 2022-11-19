@@ -244,8 +244,8 @@ export function searchTreeArray(treeArray, value, key = 'id', reverse = true) {
 export function getUserToken() {
   let userToken = getDvaApp()._store.getState().session.userToken;
   if (!userToken) {
-    // 每次都从localStorage取效率太低。
-    userToken = localStorage.getItem('userToken');
+    // 每次都从cookie取效率太低。
+    userToken = getCookie('userToken');
     const dispatch = getDvaApp()._store.dispatch;
     dispatch({
       type: 'session/updateState',
@@ -253,4 +253,33 @@ export function getUserToken() {
     });
   }
   return userToken;
+}
+
+export function setCookie(name, value, days) {
+  let expires = "";
+  if (days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days*24*60*60*1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+export function getCookie(cname) {
+  let name = cname + "=";
+  let ca = document.cookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return null;
+}
+
+export function eraseCookie(name) {
+  document.cookie = name+'=; Max-Age=-99999999;';
 }

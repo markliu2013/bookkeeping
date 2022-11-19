@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'umi';
-import {Form, Input, Select, Switch} from 'antd';
+import {Form, Input} from 'antd';
 import { updatePassword } from '@/services/user';
-import {useResponseSelectData} from "@/utils/hooks";
+import { eraseCookie } from '@/utils/util'
 import {requiredRules} from "@/utils/rules";
 import FormModal from "@/components/FormModal";
 import styles from './index.less';
@@ -10,14 +8,11 @@ import t from "@/utils/translate";
 
 export default () => {
 
-  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
-  const { visible } = useSelector(state => state.modal);
-
   function successHandler() {
-    localStorage.removeItem('userToken');
-    window.location.href = "/signin";
+    eraseCookie('userToken');
+    window.location.href = '/signin';
   }
 
   return (
