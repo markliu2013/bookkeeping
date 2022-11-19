@@ -45,10 +45,7 @@ export default () => {
           <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder={t('placeholder.password')} />
         </Form.Item>
         <div className={styles.form_row}>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>{t('signin.keep30')}</Checkbox>
-          </Form.Item>
-          <Link to="/register" style={{float: 'right'}}>{t('signin.forget')}</Link>
+
         </div>
         <div className={styles.form_row}>
           <Button size="large" type="primary" htmlType="submit" block loading={ submitting }>{t('signin')}</Button>

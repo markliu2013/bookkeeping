@@ -9,15 +9,14 @@ import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.group.GroupRepository;
 import com.jiukuaitech.bookkeeping.user.group.GroupVOForList;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
@@ -35,7 +34,7 @@ public class UserService {
     private BookRepository bookRepository;
 
     @Resource
-    private RedisTemplate<String, Integer> redisTemplate;
+    private ServletContext servletContext;
 
     @Value("${invite.code}")
     private String inviteCode;
@@ -106,14 +105,7 @@ public class UserService {
         if (!user.getEnable()) throw new UserDisabledException();
         // 用户名和密码都正确
         String token = UUID.randomUUID().toString();
-        UserSessionVO userSessionVO = UserSessionVO.fromEntity(user);
-        // 写入redis服务
-//        long rememberTime = 60*60; //不记住，这默认保存1小时。
-//        if (request.getRemember()) {
-//            rememberTime = 30*24*60*60;
-//        }
-        long rememberTime = 30*24*60*60;
-        redisTemplate.boundValueOps(token).set(user.getId(), rememberTime, TimeUnit.SECONDS);
+        servletContext.setAttribute(token, user.getId());
         userSignInResponse.setToken(token);
         userSignInResponse.setRemember(request.getRemember());
         userSignInResponse.setSessionVO(getSession(user.getId()));

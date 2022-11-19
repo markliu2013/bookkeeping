@@ -20,24 +20,16 @@ services:
       PMA_USER: root
       PMA_PASSWORD: tn8o4Ak9
 
-  redis:
-    image: redis:alpine3.11
-
   user-api:
     image: markliu2018/bookkeeping-user-api:latest
     depends_on:
       - mysql
-      - redis
     environment:
-      SERVER_PORT: 9092
       DB_HOST: mysql
       DB_PORT: 3306
       DB_NAME: bookkeeping
       DB_USER: root
       DB_PASSWORD: tn8o4Ak9
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_DB: 0
       UPLOAD_ACCESS_KEY: XXX
       UPLOAD_SECRET_KEY: XXX
       UPLOAD_FLOW_IMAGE_BUCKET: XXX

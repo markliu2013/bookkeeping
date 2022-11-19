@@ -21,31 +21,21 @@ services:
       PMA_USER: root
       PMA_PASSWORD: tn8o4Ak9
 
-  redis:
-    image: redis:alpine3.11
-
   user-api:
     build: ./bookkeeping-user-api/
     depends_on:
       - mysql
-      - redis
     environment:
-      SERVER_PORT: 9092
       DB_HOST: mysql
       DB_PORT: 3306
       DB_NAME: bookkeeping
       DB_USER: root
       DB_PASSWORD: tn8o4Ak9
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_DB: 0
       UPLOAD_ACCESS_KEY: XXXXXXXXXXXXXXXXXX
       UPLOAD_SECRET_KEY: XXXXXXXXXXXXXXXXXX
       UPLOAD_FLOW_IMAGE_BUCKET: XXXXXXXXXXXXXXXXXX
       UPLOAD_FLOW_IMAGE_HOST: XXXXXXXXXXXXXXXXXX
       UPLOAD_FLOW_IMAGE_CALL_BACK_URL: XXXXXXXXXXXXXXXXXX/api/v1/flow-images/upload-callback
-    ports:
-      - "9092:9092"
 
   user-fe:
     build: ./bookkeeping-user-fe/

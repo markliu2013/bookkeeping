@@ -4,8 +4,6 @@ export default {
   'signin.success': '登录成功！',
   'placeholder.userName': '1-16位数字或字母',
   'placeholder.password': '6-32位数字，字母或特殊字符',
-  'signin.keep30': '30天内免登录',
-  'signin.forget': '忘记密码',
 
   'register': '注册账户',
   'register.success': '注册成功！',
