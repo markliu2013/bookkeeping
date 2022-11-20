@@ -5,7 +5,6 @@ import {getSessionUser} from '@/services/user';
 export default modelExtend(model, {
   namespace: 'session',
   state: {
-    userToken: undefined,
     user: undefined,
     defaultBook: undefined,
     defaultGroup: undefined,

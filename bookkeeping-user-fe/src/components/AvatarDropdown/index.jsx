@@ -1,8 +1,8 @@
 import {useEffect} from "react";
 import {useSelector, useDispatch} from 'umi';
-import { Avatar, Menu, Spin } from 'antd';
+import {Avatar, Menu, message, Spin} from 'antd';
 import moment from "moment";
-import { eraseCookie } from '@/utils/util'
+import { signout } from '@/services/user';
 import { LogoutOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import HeaderDropdown from '@/components/HeaderDropdown';
 import UpdatePasswordModal from './UpdatePasswordModal';
@@ -17,11 +17,15 @@ export default (props) => {
     if (!user) dispatch({ type: 'session/fetchSession' });
   }, []);
 
-  const onMenuClick = (event) => {
+  const messageOperationSuccess = t('operation.success');
+  const onMenuClick = async (event) => {
     const { key } = event;
     if (key === 'logout') {
-      eraseCookie('userToken');
-      window.location.href = "/signin";
+      const response = await signout();
+      if (response && response.success) {
+        message.success(messageOperationSuccess);
+        window.location.href = "/signin";
+      }
     }
     if (key === 'updatePassword') {
       dispatch({ type: 'modal/show', payload: {component: UpdatePasswordModal }});

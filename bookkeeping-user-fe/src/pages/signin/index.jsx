@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Form, Input, Checkbox, Button, message } from 'antd';
 import { Link, history, useDispatch, useSelector } from 'umi';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { setCookie } from '@/utils/util'
 import { userNameRules, passwordRules }  from '@/utils/rules';
 import t from '@/utils/translate';
 
@@ -18,13 +17,6 @@ export default () => {
   useEffect(() => {
     if (signInResponse && signInResponse.success) {
       message.success(messageLoginSuccess);
-      dispatch({
-        type: 'session/updateState',
-        payload: { userToken: signInResponse.data.token }
-      });
-      if (signInResponse.data.remember) {
-        setCookie('userToken', signInResponse.data.token, 30)
-      }
       history.push({ pathname: '/dashboard' });
     }
     return () => {

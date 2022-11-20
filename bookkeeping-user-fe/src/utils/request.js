@@ -1,6 +1,5 @@
 import { extend } from "umi-request";
 import { message } from 'antd';
-import { getUserToken } from '@/utils/util'
 
 const request = extend({
   prefix: "/api/v1/",
@@ -38,26 +37,6 @@ request.interceptors.response.use(async (response, options) => {
     }
   }
   return response;
-});
-
-
-// 添加token https://www.cnblogs.com/qkstart/p/11856168.html
-
-request.interceptors.request.use(async (url, options) => {
-  if (
-    options.method === 'post' ||
-    options.method === 'put' ||
-    options.method === 'delete' ||
-    options.method === 'get'
-  ) {
-    const headers = {
-      'User-Token': getUserToken()
-    };
-    return {
-      url,
-      options: { ...options, headers },
-    };
-  }
 });
 
 export default request;

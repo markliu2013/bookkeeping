@@ -1,6 +1,5 @@
 import {Form, Input} from 'antd';
 import { updatePassword } from '@/services/user';
-import { eraseCookie } from '@/utils/util'
 import {requiredRules} from "@/utils/rules";
 import FormModal from "@/components/FormModal";
 import styles from './index.less';
@@ -11,7 +10,6 @@ export default () => {
   const [form] = Form.useForm();
 
   function successHandler() {
-    eraseCookie('userToken');
     window.location.href = '/signin';
   }
 

@@ -14,6 +14,12 @@ export async function signin(params) {
   });
 }
 
+export async function signout() {
+  return request('signout', {
+    method: 'POST',
+  });
+}
+
 export async function updatePassword(params) {
   return request('updatePassword', {
     method: 'PUT',

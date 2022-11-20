@@ -17,7 +17,12 @@ public class UserController extends BaseController {
     // 登录
     @RequestMapping(method = RequestMethod.POST, value = "/signin")
     public BaseResponse handleSignin(@Valid @RequestBody UserSignInRequest request) {
-        return new DataResponse<>(userService.signin(request));
+        return new DataResponse<>(userService.signin(request, getRequest(), getResponse()));
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/signout")
+    public BaseResponse handleSignout() {
+        return new BaseResponse(userService.signout(getRequest(), getResponse()));
     }
     
     // 注册
@@ -29,7 +34,9 @@ public class UserController extends BaseController {
     // 修改密码
     @RequestMapping(method = RequestMethod.PUT, value = "/updatePassword")
     public BaseResponse handleUpdatePassword(@RequestAttribute("userSignInId") Integer userSignInId, @Valid @RequestBody UserUpdatePasswordRequest request) {
-        return new BaseResponse(userService.updatePassword(userSignInId, request));
+        userService.updatePassword(userSignInId, request);
+        userService.signout(getRequest(), getResponse());
+        return new BaseResponse(true);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/session")

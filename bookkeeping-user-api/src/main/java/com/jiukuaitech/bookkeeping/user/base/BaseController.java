@@ -1,18 +1,19 @@
 package com.jiukuaitech.bookkeeping.user.base;
 
+import lombok.Getter;
+import lombok.Setter;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+@Getter
+@Setter
 public class BaseController {
 
     @Resource
     private HttpServletRequest request;
 
-    public HttpServletRequest getRequest() {
-        return request;
-    }
+    @Resource
+    private HttpServletResponse response;
 
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
-    }
 }

@@ -9,12 +9,17 @@ import com.jiukuaitech.bookkeeping.user.exception.ItemNotFoundException;
 import com.jiukuaitech.bookkeeping.user.group.GroupRepository;
 import com.jiukuaitech.bookkeeping.user.group.GroupVOForList;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.WebUtils;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -96,7 +101,7 @@ public class UserService {
         return true;
     }
 
-    public UserSignInResponse signin(UserSignInRequest request) {
+    public UserSignInResponse signin(UserSignInRequest request, HttpServletRequest httpServletRequest, HttpServletResponse response) {
         UserSignInResponse userSignInResponse = new UserSignInResponse();
         User user = userRepository.findOneByUserName(request.getUserName());
         if (user == null || !user.getPassword().equals(CommonUtils.encodePassword(request.getPassword()))) {
@@ -109,7 +114,29 @@ public class UserService {
         userSignInResponse.setToken(token);
         userSignInResponse.setRemember(request.getRemember());
         userSignInResponse.setSessionVO(getSession(user.getId()));
+        // set cookie
+        if (request.getRemember()) {
+            Cookie cookie = new Cookie("User-Token", token);
+            cookie.setMaxAge(30 * 24 * 60 * 60);
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        } else {
+            httpServletRequest.getSession().setAttribute("User-Token", token);
+        }
         return userSignInResponse;
+    }
+
+    public boolean signout(HttpServletRequest httpServletRequest, HttpServletResponse response) {
+        if (WebUtils.getCookie(httpServletRequest, "User-Token") != null) {
+            Cookie deleteServletCookie = new Cookie("User-Token", null);
+            deleteServletCookie.setMaxAge(0);
+            deleteServletCookie.setPath("/");
+            response.addCookie(deleteServletCookie);
+        }
+        httpServletRequest.getSession().removeAttribute("User-Token");
+        return true;
     }
 
     public SessionVO getSession(Integer userSignInId) {
