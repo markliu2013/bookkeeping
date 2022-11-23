@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "umi";
-import {Button, message, Modal, Upload} from "antd";
+import {message, Modal, Upload} from "antd";
 import {updateImages} from '@/services/flow';
 import t from "@/utils/translate";
 import {PlusOutlined} from "@ant-design/icons";
@@ -61,7 +61,7 @@ export default (props) => {
 
   const messageFileSize = t('upload.size.error');
   const uploadProps = {
-    accept: 'image/jpeg, image/png',
+    accept: 'image/jpeg, image/png, application/pdf',
     multiple: true,
     maxCount: 3,
     fileList: fileList,

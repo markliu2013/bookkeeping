@@ -48,11 +48,11 @@ public class FlowImageService {
         }
         Auth auth = Auth.create(uploadAK, uploadSK);
         StringMap putPolicy = new StringMap();
-        String saveKey = userSignInId.toString() + "$(etag)" + ".jpg";
+        String saveKey = userSignInId.toString() + "_" + "$(year)$(mon)$(day)$(hour)$(min)$(sec)" + "$(ext)";
         putPolicy.put("saveKey", saveKey);
         putPolicy.put("fsizeMin", 1024); //1KB
         putPolicy.put("fsizeLimit", 15728640); //15M 用15*1024*1024报错
-        putPolicy.put("mimeLimit", "image/jpeg;image/jpg;;image/png");
+        putPolicy.put("mimeLimit", "image/jpeg;image/jpg;;image/png;application/pdf");
         putPolicy.put("fileType", 0); //0 为标准存储（默认），1 为低频存储，2 为归档存储。
         // 自定义上传回复的凭证
 //        putPolicy.put("returnBody", "{\"key\":\"$(key)}\"");
