@@ -118,7 +118,7 @@ public class UserService {
         if (request.getRemember()) {
             Cookie cookie = new Cookie("User-Token", token);
             cookie.setMaxAge(30 * 24 * 60 * 60);
-            cookie.setSecure(true);
+//            cookie.setSecure(true);// only https flat
             cookie.setHttpOnly(true);
             cookie.setPath("/");
             response.addCookie(cookie);
