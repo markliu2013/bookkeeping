@@ -6,7 +6,7 @@ An excellent bookkeeping solution for individual person & self-employed.
 - Help - [https://help.moneywhere.com](https://help.moneywhere.com)
 
 
-You can download the jar file from release page, then use javar -jar to run it.
+You can download the jar file from [https://github.com/markliu2013/bookkeeping/releases/tag/v1.0.0](release page), then use javar -jar to run it.
 
 ## Features
 
