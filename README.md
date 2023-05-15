@@ -2,14 +2,14 @@
 
 An excellent bookkeeping solution for individual person & self-employed.
 
-- Preview - http://testjz.jiukuaitech.com/ (invite code is 4590)
-- Documentation - https://docs.jz.jiukuaitech.com/
+- Preview - [https://demo.moneywhere.com](https://demo.moneywhere.com)
+- Help - [https://hepl.moneywhere.com](https://hepl.moneywhere.com)
 
 ## Features
 
 - Monitor of your financial situation.
 - Track your incomes & expenses.
-- Sync between devices.
+- Self hosted your data.
 
 ## Usage
 
